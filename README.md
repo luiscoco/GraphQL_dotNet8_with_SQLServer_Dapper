@@ -150,6 +150,7 @@ This is the csproj file
 
 ## 5. Create the project structure
 
+![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_Dapper/assets/32194879/bd141059-5e49-438a-9ab4-0c5dccc8c2a0)
 
 ## 6. Create the Models
 
@@ -159,11 +160,64 @@ This is the csproj file
 
 ## 8. Create the Utilities (DapperContext)
 
+
+
 ## 9. Create the GraphQL Types, Query and Mutation
+
+
 
 ## 10. Modify the application middleware (program.cs)
 
+```csharp
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using GraphQLDemo.GraphQL;
+using GraphQLDemo.Services;
+using System;
+using GraphQLDemo.Utilities;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<DapperContext>();
+
+// Add services to the container.
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IPostService, PostService>();
+
+// Add GraphQL services
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>()
+    .AddMutationType<Mutation>()
+    .AddType<AuthorType>()
+    .AddType<PostType>();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+app.UseRouting();
+
+// Use GraphQL middleware
+app.MapGraphQL();
+
+app.Run();
+```
+
 ## 11. Modify the appsettings.json
 
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=GraphQLProductDB;User ID=sa;Password=Luiscoco123456;Encrypt=false;TrustServerCertificate=true;"
+  },
+  "AllowedHosts": "*"
+}
+```
 
 ## 12. Run and Test the application 
