@@ -106,6 +106,23 @@ We can verify the new tables
 
 ## 3. Create a new Web API in Visual Studio 2022 Community Edition
   
+We run Visual Studio 2022 Community Edition and we create a new project
+
+![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework/assets/32194879/346b3777-7f19-439c-bb06-a24ad1503729)
+
+We select the **api** project template
+
+![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework/assets/32194879/79fa8f9e-b440-4b3f-bd26-78469730622f)
+
+We input the project name and location 
+
+![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework/assets/32194879/95ec4d51-f35e-4e56-9833-d9d042320df5)
+
+We select the project default features
+
+![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework/assets/32194879/8fc0435d-c623-44d9-9173-ec2bd1cdf77b)
+
+After opening the project in Visual Studio we can delete the Controller folder and the Weatherforecast controller and service
 
 ## 4. Load the project dependencies
 
