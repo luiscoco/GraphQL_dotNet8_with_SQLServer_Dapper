@@ -34,6 +34,8 @@ We run SSMS SQL Server Management Studio and we connect to the SQL Server runnin
 
 ![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework/assets/32194879/5381d14a-1019-421e-903e-cf37ccb0300d)
 
+## 2. Create the database and tables
+
 We create the database for this sample
 
 ![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework/assets/32194879/4c0600ef-077d-49eb-a970-c733ac663e24)
@@ -97,3 +99,33 @@ GO
 ALTER TABLE [dbo].[Posts] CHECK CONSTRAINT [FK_Posts_Authors_AuthorId]
 GO
 ```
+
+We can verify the new tables 
+
+![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_Dapper/assets/32194879/7484ad4a-5f81-415f-ba4f-321a5c7726ef)
+
+## 3. Create a new Web API in Visual Studio 2022 Community Edition
+  
+
+## 4. Load the project dependencies
+
+
+## 5. Create the project structure
+
+
+## 6. Create the Models
+
+
+## 7. Create the Services
+
+
+## 8. Create the Utilities (DapperContext)
+
+## 9. Create the GraphQL Types, Query and Mutation
+
+## 10. Modify the application middleware (program.cs)
+
+## 11. Modify the appsettings.json
+
+
+## 12. Run and Test the application 
