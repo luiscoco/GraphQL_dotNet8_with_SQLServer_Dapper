@@ -209,12 +209,233 @@ namespace GraphQLDemo.Models
 
 ## 7. Create the Services
 
+**IAuthorService.cs**
+
+```csharp
+using GraphQLDemo.Models;
+
+namespace GraphQLDemo.Services
+{
+    public interface IAuthorService
+    {
+        Author GetAuthorById(int id);
+        List<Author> GetAllAuthors();
+    }
+}
+```
+
+**IPostService.cs**
+
+```csharp
+using GraphQLDemo.Models;
+
+namespace GraphQLDemo.Services
+{
+    public interface IPostService
+    {
+        Post GetPostById(int id);
+        List<Post> GetAllPosts();
+        Post AddPost(Post post);
+    }
+}
+```
+
+**AuthorService.cs**
+
+```csharp
+using Dapper;
+using GraphQLDemo.Models;
+using GraphQLDemo.Utilities;
+using System.Data;
+using System.Collections.Generic;
+
+namespace GraphQLDemo.Services
+{
+    public class AuthorService : IAuthorService
+    {
+        private readonly DapperContext _dapperContext;
+
+        public AuthorService(DapperContext dapperContext)
+        {
+            _dapperContext = dapperContext;
+        }
+
+        public Author GetAuthorById(int id)
+        {
+            using var connection = _dapperContext.CreateConnection();
+            var authorDictionary = new Dictionary<int, Author>();
+
+            var authors = connection.Query<Author, Post, Author>(
+                "SELECT a.*, p.* FROM Authors a LEFT JOIN Posts p ON a.Id = p.AuthorId WHERE a.Id = @Id",
+                (author, post) =>
+                {
+                    if (!authorDictionary.TryGetValue(author.Id, out var authorEntry))
+                    {
+                        authorEntry = author;
+                        authorEntry.Posts = new List<Post>();
+                        authorDictionary.Add(authorEntry.Id, authorEntry);
+                    }
+
+                    if (post != null)
+                    {
+                        authorEntry.Posts.Add(post);
+                    }
+
+                    return authorEntry;
+                },
+                param: new { Id = id },
+                splitOn: "Id"
+            ).FirstOrDefault();
+
+            return authors;
+        }
+
+        public List<Author> GetAllAuthors()
+        {
+            using var connection = _dapperContext.CreateConnection();
+            var authorDictionary = new Dictionary<int, Author>();
+
+            var authors = connection.Query<Author, Post, Author>(
+                "SELECT a.*, p.* FROM Authors a LEFT JOIN Posts p ON a.Id = p.AuthorId",
+                (author, post) =>
+                {
+                    if (!authorDictionary.TryGetValue(author.Id, out var authorEntry))
+                    {
+                        authorEntry = author;
+                        authorEntry.Posts = new List<Post>();
+                        authorDictionary.Add(authorEntry.Id, authorEntry);
+                    }
+
+                    if (post != null)
+                    {
+                        authorEntry.Posts.Add(post);
+                    }
+
+                    return authorEntry;
+                },
+                splitOn: "Id"
+            ).Distinct().ToList();
+
+            return authors;
+        }
+    }
+}
+```
+
+**PostService.cs**
+
+```csharp
+using Dapper;
+using GraphQLDemo.Models;
+using GraphQLDemo.Utilities;
+using System.Data;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace GraphQLDemo.Services
+{
+    public class PostService : IPostService
+    {
+        private readonly DapperContext _dapperContext;
+
+        public PostService(DapperContext dapperContext)
+        {
+            _dapperContext = dapperContext;
+        }
+
+        public Post GetPostById(int id)
+        {
+            using var connection = _dapperContext.CreateConnection();
+            var post = connection.Query<Post, Author, Post>(
+                "SELECT p.*, a.* FROM Posts p INNER JOIN Authors a ON p.AuthorId = a.Id WHERE p.Id = @Id",
+                (post, author) =>
+                {
+                    post.Author = author;
+                    return post;
+                },
+                param: new { Id = id },
+                splitOn: "Id"
+            ).FirstOrDefault();
+
+            return post;
+        }
+
+        public List<Post> GetAllPosts()
+        {
+            using var connection = _dapperContext.CreateConnection();
+            var postDictionary = new Dictionary<int, Post>();
+
+            var posts = connection.Query<Post, Author, Post>(
+                "SELECT p.*, a.* FROM Posts p INNER JOIN Authors a ON p.AuthorId = a.Id",
+                (post, author) =>
+                {
+                    post.Author = author;
+                    return post;
+                },
+                splitOn: "Id"
+            ).ToList();
+
+            return posts;
+        }
+
+        public Post AddPost(Post post)
+        {
+            using var connection = _dapperContext.CreateConnection();
+
+            var authorExists = connection.QuerySingleOrDefault<Author>(
+                "SELECT * FROM Authors WHERE Id = @AuthorId",
+                new { AuthorId = post.AuthorId });
+
+            if (authorExists == null)
+            {
+                throw new Exception($"Author with ID {post.AuthorId} not found.");
+            }
+
+            var sql = @"
+                INSERT INTO Posts (Title, Content, AuthorId) VALUES (@Title, @Content, @AuthorId);
+                SELECT CAST(SCOPE_IDENTITY() as int);
+            ";
+
+            var postId = connection.QuerySingle<int>(sql, post);
+            var newPost = GetPostById(postId); // Re-fetch the post to include the Author
+
+            return newPost;
+        }
+    }
+}
+```
 
 ## 8. Create the Utilities (DapperContext)
 
 
+**DapperContext.cs**
+
+```csharp
+using System.Data;
+using Microsoft.Data.SqlClient;
+
+namespace GraphQLDemo.Utilities
+{
+    public class DapperContext
+    {
+        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
+
+        public DapperContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("DefaultConnection");
+        }
+
+        public IDbConnection CreateConnection()
+            => new SqlConnection(_connectionString);
+    }
+}
+```
 
 ## 9. Create the GraphQL Types, Query and Mutation
+
+
 
 
 
