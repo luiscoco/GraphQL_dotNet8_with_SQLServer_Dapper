@@ -37,3 +37,63 @@ We run SSMS SQL Server Management Studio and we connect to the SQL Server runnin
 We create the database for this sample
 
 ![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework/assets/32194879/4c0600ef-077d-49eb-a970-c733ac663e24)
+
+We have to create the Author and Post tables inside the database
+
+For creating the **Authors table** run this sql query
+
+```sql
+USE [GraphQLProductDB]
+GO
+
+/****** Object:  Table [dbo].[Authors]    Script Date: 27/02/2024 11:59:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Authors](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](200) NOT NULL,
+ CONSTRAINT [PK_Authors] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+```
+
+For creating the **Posts table** run this sql query
+
+```sql
+USE [GraphQLProductDB]
+GO
+
+/****** Object:  Table [dbo].[Posts]    Script Date: 27/02/2024 12:00:44 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Posts](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Title] [nvarchar](200) NOT NULL,
+	[Content] [nvarchar](max) NOT NULL,
+	[AuthorId] [int] NOT NULL,
+ CONSTRAINT [PK_Posts] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Posts]  WITH CHECK ADD  CONSTRAINT [FK_Posts_Authors_AuthorId] FOREIGN KEY([AuthorId])
+REFERENCES [dbo].[Authors] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[Posts] CHECK CONSTRAINT [FK_Posts_Authors_AuthorId]
+GO
+```
