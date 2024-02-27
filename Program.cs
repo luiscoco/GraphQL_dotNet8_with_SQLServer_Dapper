@@ -9,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<DapperContext>();
 
-
 // Add services to the container.
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IPostService, PostService>();
