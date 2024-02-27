@@ -2,7 +2,7 @@
 
 The source code for this example is available in this github repo: 
 
-https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework
+https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_Dapper
 
 ## 1. Pull and run the SQLServer Docker image with Docker Desktop
 
