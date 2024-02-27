@@ -610,7 +610,7 @@ query GetAuthor {
 
 Replace 1 with the actual ID of the author you want to test
 
-![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework/assets/32194879/982fabc0-9c1d-4c2d-94ce-42f33c7a94b1)
+![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_Dapper/assets/32194879/cfa6337b-f5db-4ca8-a509-bcebb0ea923e)
 
 **Fetch a Post by ID**
 
@@ -632,7 +632,7 @@ query GetPost {
 
 Replace 1 with the actual ID of the post you want to test
 
-![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework/assets/32194879/4a80128e-bd2a-4cf8-9b4f-1c050c26aa89)
+![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_Dapper/assets/32194879/40af88ff-14fa-4a43-9a35-2d76105266b8)
 
 **Mutation Example (Add a New Post)**
 
@@ -654,4 +654,4 @@ mutation AddNewPost {
 
 Replace "New GraphQL Post", "Exploring GraphQL mutations.", and 1 with your desired post title, content, and author ID, respectively
 
-![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_EntityFramework/assets/32194879/7840005e-6cbb-4cd1-9ffd-59e36be94c12)
+![image](https://github.com/luiscoco/GraphQL_dotNet8_with_SQLServer_Dapper/assets/32194879/01cbcc56-dd1b-4236-b1b9-a00202fa1dde)
